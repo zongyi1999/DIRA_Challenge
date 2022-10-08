@@ -8,30 +8,30 @@ MODEL:
     DEPTH: 101x
     WITH_IBN: True
     WITH_NL: True
-  WEIGHTS: "./logs/Patent/R101_384/model_best.pth"
-
+  WEIGHTS: "./logs/Patent/R101_256/model_best.pth"
 SOLVER:
   BIAS_LR_FACTOR: 1.
   BASE_LR: 0.000035
   IMS_PER_BATCH: 64
   MAX_EPOCH: 60
-  STEPS: [10, 20]
+  STEPS: [15, 30]
   WARMUP_ITERS: 3000
   CHECKPOINT_PERIOD: 5
 
-
 DATASETS:
   NAMES: ("Patent",)
-  TESTS: ("PatentTest",)
+  TESTS: ("Patent",)
 
 DATALOADER:
   SAMPLER_TRAIN: BalancedIdentitySampler
 TEST:
   EVAL_PERIOD: 5
-  IMS_PER_BATCH: 32 #128
+  IMS_PER_BATCH: 128
+  # FLIP: 
+  #   ENABLED: True
   AQE:
-    ENABLED: True
+    ENABLED: False
     ALPHA : 2.0
     QE_TIME : 1
     QE_K: 5
-OUTPUT_DIR: logs/Patent/submit_log
+OUTPUT_DIR: logs/Patent/R101_384
