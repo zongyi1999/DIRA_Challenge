@@ -1,0 +1,99 @@
+_BASE_: ../Base-SBS.yml
+
+INPUT:
+  # SIZE_TRAIN: [256, 256]
+  # SIZE_TEST: [256, 256]
+  SIZE_TRAIN: [384, 384]
+  SIZE_TEST: [384, 384]
+MODEL:
+  BACKBONE:
+    NAME: build_resnext_backbone
+    DEPTH: 101x
+    WITH_IBN: True
+    WITH_NL: True
+  WEIGHTS: "/media/backup/competition/eccv_retrieve/fast-reid/logs/Patent/sbs_R101xt-ibn_3_384/model_best.pth"
+
+  # WEIGHTS: "/media/backup/competition/eccv_retrieve/fast-reid/logs/Patent/sbs_R101-ibn_goingon_2/model_best.pth"
+  # WEIGHTS: "/media/backup/competition/eccv_retrieve/fast-reid/logs/Patent/sbs_R101-ibn_goingon_3_384/model_best.pth"
+
+SOLVER:
+  BIAS_LR_FACTOR: 1.
+  BASE_LR: 0.0000035
+  IMS_PER_BATCH: 32 #64
+  SCHED: MultiStepLR
+  MAX_EPOCH: 60
+  STEPS: [20, 30]
+  GAMMA: 0.1
+  WARMUP_ITERS: 3000
+  CHECKPOINT_PERIOD: 5
+# SOLVER:
+#   OPT: SGD
+#   BASE_LR: 0.01
+#   ETA_MIN_LR: 7.7e-5
+#   IMS_PER_BATCH: 128
+#   MAX_EPOCH: 60
+#   WARMUP_ITERS: 3000
+#   FREEZE_ITERS: 3000
+#   CHECKPOINT_PERIOD: 5
+
+DATASETS:
+  NAMES: ("Patent",)
+  TESTS: ("Patent",)
+
+DATALOADER:
+  SAMPLER_TRAIN: BalancedIdentitySampler
+TEST:
+  EVAL_PERIOD: 5
+  IMS_PER_BATCH: 96 # 256
+  # FLIP: 
+  #   ENABLED: True
+  # AQE:
+  #   ENABLED: True
+  #   ALPHA : 2.0
+  #   QE_TIME : 1
+  #   QE_K: 5
+OUTPUT_DIR: logs/Patent/sbs_R101xt-ibn_3_112_2_next_384_true
+
+
+# _BASE_: ../Base-SBS.yml
+
+# INPUT:
+#   SIZE_TRAIN: [256, 256]
+#   SIZE_TEST: [256, 256]
+
+# MODEL:
+#   BACKBONE:
+#     DEPTH: 101x
+#     WITH_IBN: True
+#     WITH_NL: True
+#   WEIGHTS: "/media/backup/competition/eccv_retrieve/fast-reid/logs/Patent/sbs_R101-ibn_goingon/model_best.pth"
+# SOLVER:
+#   BIAS_LR_FACTOR: 1.
+#   BASE_LR: 0.00001
+#   IMS_PER_BATCH: 128
+#   MAX_EPOCH: 60
+#   STEPS: [10, 20]
+#   WARMUP_ITERS: 3000
+#   CHECKPOINT_PERIOD: 5
+
+# # SOLVER:
+# #   OPT: SGD
+# #   BASE_LR: 0.01
+# #   ETA_MIN_LR: 7.7e-5
+# #   IMS_PER_BATCH: 128
+# #   MAX_EPOCH: 60
+# #   WARMUP_ITERS: 3000
+# #   FREEZE_ITERS: 3000
+# #   CHECKPOINT_PERIOD: 5
+
+# DATASETS:
+#   NAMES: ("Patent",)
+#   TESTS: ("Patent",)
+
+# DATALOADER:
+#   SAMPLER_TRAIN: BalancedIdentitySampler
+# TEST:
+#   EVAL_PERIOD: 5
+#   IMS_PER_BATCH: 256
+
+# OUTPUT_DIR: logs/Patent/sbs_R101-ibn_goingon_2
