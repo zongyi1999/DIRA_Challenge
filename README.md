@@ -1,78 +1,96 @@
-<img src=".github/FastReID-Logo.png" width="300" >
-
-[![Gitter](https://badges.gitter.im/fast-reid/community.svg)](https://gitter.im/fast-reid/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-
-Gitter: [fast-reid/community](https://gitter.im/fast-reid/community?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
-
-Wechat: 
-
-<img src=".github/wechat_group.png" width="150" >
 
 
-FastReID is a research platform that implements state-of-the-art re-identification algorithms. It is a ground-up rewrite of the previous version, [reid strong baseline](https://github.com/michuanhaohao/reid-strong-baseline).
 
-## What's New
 
-- [Sep 2021] [DG-ReID](https://github.com/xiaomingzhid/sskd) is updated, you can check the [paper](https://arxiv.org/pdf/2108.05045.pdf).
-- [June 2021] [Contiguous parameters](https://github.com/PhilJd/contiguous_pytorch_params) is supported, now it can
-  accelerate ~20%.
-- [May 2021] Vision Transformer backbone supported, see `configs/Market1501/bagtricks_vit.yml`.
-- [Apr 2021] Partial FC supported in [FastFace](projects/FastFace)!
-- [Jan 2021] TRT network definition APIs in [FastRT](projects/FastRT) has been released! 
-Thanks for [Darren](https://github.com/TCHeish)'s contribution.
-- [Jan 2021] NAIC20(reid track) [1-st solution](projects/NAIC20) based on fastreid has been released！
-- [Jan 2021] FastReID V1.0 has been released！🎉
-  Support many tasks beyond reid, such image retrieval and face recognition. See [release notes](https://github.com/JDAI-CV/fast-reid/releases/tag/v1.0.0).
-- [Oct 2020] Added the [Hyper-Parameter Optimization](projects/FastTune) based on fastreid. See `projects/FastTune`.
-- [Sep 2020] Added the [person attribute recognition](projects/FastAttr) based on fastreid. See `projects/FastAttr`.
-- [Sep 2020] Automatic Mixed Precision training is supported with `apex`. Set `cfg.SOLVER.FP16_ENABLED=True` to switch it on.
-- [Aug 2020] [Model Distillation](projects/FastDistill) is supported, thanks for [guan'an wang](https://github.com/wangguanan)'s contribution.
-- [Aug 2020] ONNX/TensorRT converter is supported.
-- [Jul 2020] Distributed training with multiple GPUs, it trains much faster.
-- Includes more features such as circle loss, abundant visualization methods and evaluation metrics, SoTA results on conventional, cross-domain, partial and vehicle re-id, testing on multi-datasets simultaneously, etc.
-- Can be used as a library to support [different projects](projects) on top of it. We'll open source more research projects in this way.
-- Remove [ignite](https://github.com/pytorch/ignite)(a high-level library) dependency and powered by [PyTorch](https://pytorch.org/).
 
-We write a [fastreid intro](https://l1aoxingyu.github.io/blogpages/reid/fastreid/2020/05/29/fastreid.html) 
-and [fastreid v1.0](https://l1aoxingyu.github.io/blogpages/reid/fastreid/2021/04/28/fastreid-v1.html) about this toolbox.
 
-## Changelog
+# Code for ECCV DIRA Data Challenge
 
-Please refer to [changelog.md](CHANGELOG.md) for details and release history.
+The method details are described in our [report](https://github.com/dashengge/pet-biometrics/blob/main/report.pdf)
 
-## Installation
+## Requirements
 
-See [INSTALL.md](INSTALL.md).
+- Linux or macOS with python ≥ 3.6
 
-## Quick Start
+- PyTorch ≥ 1.6
 
-The designed architecture follows this guide [PyTorch-Project-Template](https://github.com/L1aoXingyu/PyTorch-Project-Template), you can check each folder's purpose by yourself.
+- [yacs](https://github.com/rbgirshick/yacs)
 
-See [GETTING_STARTED.md](GETTING_STARTED.md).
+- Cython (optional to compile evaluation code)
 
-Learn more at out [documentation](https://fast-reid.readthedocs.io/). And see [projects/](projects) for some projects that are build on top of fastreid.
+- tensorboard (needed for visualization): `pip install tensorboard`
 
-## Model Zoo and Baselines
+- gdown (for automatically downloading pre-train model)
 
-We provide a large set of baseline results and trained models available for download in the [Fastreid Model Zoo](MODEL_ZOO.md).
+- sklearn
 
-## Deployment
+- termcolor
 
-We provide some examples and scripts to convert fastreid model to Caffe, ONNX and TensorRT format in [Fastreid deploy](tools/deploy).
+- tabulate
 
-## License
+- [faiss](https://github.com/facebookresearch/faiss) `pip install faiss-gpu`
 
-Fastreid is released under the [Apache 2.0 license](LICENSE).
+- for conda
 
-## Citing FastReID
+  ```
+  conda create -n fastreid python=3.8
+  conda activate fastreid
+  conda install pytorch==1.7.1 torchvision tensorboard -c pytorch
+  pip install -r docs/requirements.txt
+  ```
 
-If you use FastReID in your research or wish to refer to the baseline results published in the Model Zoo, please use the following BibTeX entry.
+We use GPU 3090 for training and testing. The cuda version is 11.1, torch version is 1.7.1, the python version is 3.8.8.
 
-```BibTeX
-@article{he2020fastreid,
-  title={FastReID: A Pytorch Toolbox for General Instance Re-identification},
-  author={He, Lingxiao and Liao, Xingyu and Liu, Wu and Liu, Xinchen and Cheng, Peng and Mei, Tao},
-  journal={arXiv preprint arXiv:2006.02631},
-  year={2020}
-}
+##  Dataset
+
+Download the competition datasets patent data and codalab test set, and then unzip them under the datasets directory like: 
+
 ```
+datasets
+├── train_data
+|	└── patent_data
+|		└── I20180102
+|		└── ...
+|	└── train_patent_val.txt
+|	└── train_patent_trn.txt
+├── test_data
+|	└── codalab_test_set
+|	└── database
+|	└── lists
+|	└── queries
+
+```
+
+## Prepare Pre-trained Models
+
+We have trained 1, and you can download the pre-trained model form this link: . Then you should save it under the path of logs. The file tree should be like as:
+
+```
+logs
+└── resnet101
+    └── config.yaml
+    └── model_final.pth
+```
+
+## Test
+
+You can get the final submit.csv by runing:
+
+```
+bash predict.sh
+```
+
+It will generate submit.csv in the root dir, which is the final ensemble result. The test process takes approximately 20mins.
+
+## Training
+
+```
+bash train.sh
+```
+
+We train our model through three stage. Stage1 train the original dataset with 224 resolution by different losses , backbone and batchsize. Stage2 finetune the trainset with 384 resolution which is inspired by **[kaggle-landmark-2021-1st-place](https://github.com/ChristofHenkel/kaggle-landmark-2021-1st-place)**. Stage3 finetune the model with trainset and validation set which is assigned with pseudo labels. The training process takes approximately 64 hours.
+
+To simplify, you can also train stage 1 alone, which can achieve 88.6% AUC on test set with a single model.
+
+## Conclusion
+
