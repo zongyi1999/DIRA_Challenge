@@ -16,7 +16,7 @@ Illustrations, drawings, technical diagrams and diagrams can help people quickly
 
 ## Overview
 
-The framework of our method is shown in Figure1, which consists of Data Augmentation, backbone , loss , testing details, training details and datasets modules.
+The framework of our method is shown in Figure1, which consists of Data Augmentation, backbone, loss , testing details, training details and datasets modules.
 
 ![image-20221009162405174](.assets/image-20221009162405174.png)
 
@@ -36,25 +36,21 @@ In the training,  circle loss[] and soft-margin triplet loss[] are utilized for 
 
 
 
-
-
 ### Testing
 
-In the test phase, the test image is input into the model to get feature representation. Then the extracted feature is compared with the features in the feature library for the distance metric such as Eucildean and cosine measure. Thereafter, the results are post-processed by Query Expansion which is a re-rank method. The flow of Query Expansion is as follows: Given a query image, and use it to find m similar gallery images. The query feature is defined as fq and m similar gallery features are defined as fg. Then the new query feature is constructed by averaging the verified gallery features and the query feature
-
-
-
-
+In the test phase, the test images are resized to  384×384 resolution and inputted into the model to get feature representation. We first calculate the Euclidean distance between the query and gallery features. Then Query expansion(QE) is used for post-processing. Given a query image and its top k similar gallery images. The new query feature is constructed by averaging the verified gallery features and the query feature.  The new query feature is used for following image retrieve to boost performance.
 
 ### Training
 
-
+We divide our training procedure into two stages . In the first stage, we train our network on 224×224 images for the first 70 epochs. and then finetune the network on 384×384 resolution for 50 epochs.  The learning rate in stage 1 is set to 0.000035 initially and gradually increased to 0.00035 during the 2k iteration by linear warm up. Then the learning rate starts from 0.00035 and decays to 7.7 $\times$ $10^{-7}$ by cosine rule after 9k iterations.  The learning rate in stage 2 is set to 0.000035 initially and decays to 7.7 $\times$ $10^{-7}$ by cosine rule. Random Erasing probability is set to 0.5. The optimizer is Adam. The weight decay is 0.0005.  Each min-batch includes 64 images, which includes 16 objects and 4 images per object.
 
 ### Dataset
 
-We only utilize the DeepPatent dataset for training and validation. The training set contains...
+We only utilize the DeepPatent dataset for training and validation, which provides more than 350,000 design patent drawings for the purpose of image retrieval.
 
 ### Reference
+
+
 
 
 
