@@ -28,7 +28,7 @@ we use autoaugment method[1]. It can search appropriate composed augmentation in
 
 ### Backbone
 
-The backbone network is a very important module for extracting image representations in image retrieval task. We adopt ResNet101[1] as our backbone. IBN[1] and Non-local[1] modules are added to ResNet101 to get more robust features. IBN is.  Both modules are used to help model to learn a better universal image representations. The input image size is set to 256 in the first stage and 384 in the second stage. After the backbone network, a BN layer and Generalized Mean Pooling (GEM) are utilized to extract the retrieval features and a classifier layer is used to output the probability of different IDs.
+The backbone network is a very important module for extracting image representations in image retrieval task. We adopt ResNet101[1] as our backbone. IBN[1] and Non-local[1] modules are added to ResNet101 to get more robust features. IBN is.  Both modules are used to help model to learn a better universal image representations. The input image size is set to 256 in the first stage and 384 in the second stage.  After the backbone network, a BN layer and Generalized Mean Pooling (GEM) are utilized to extract the retrieval features and a classifier layer is used to output the probability of different IDs.
 
 ### Losses
 
