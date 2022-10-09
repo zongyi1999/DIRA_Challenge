@@ -40,13 +40,13 @@ In the training,  circle loss[] and soft-margin triplet loss[] are utilized for 
 
 ### Testing
 
-In the test phase, the patent images are input into our model to extract features. And the similary scores between query and gallery features by calculating the Euclidean distance. The DBA and AQE are utilized as post-processing. AQE first calculate the top-k similar images for the query image. And then the new query and gallery features are updated by the weighted sum of these similar images features.   DBA re-compulate the feautre by averaring the top-k similairy images in the 
+In the test phase, the test image is input into the model to get feature representation. Then the extracted feature is compared with the features in the feature library for the distance metric such as Eucildean and cosine measure. Thereafter, the results are post-processed by Query Expansion which is a re-rank method. The flow of Query Expansion is as follows: Given a query image, and use it to find m similar gallery images. The query feature is defined as fq and m similar gallery features are defined as fg. Then the new query feature is constructed by averaging the verified gallery features and the query feature
+
+
 
 
 
 ### Training
-
-
 
 
 
