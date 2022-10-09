@@ -8,43 +8,39 @@
 
 ## Introduction
 
-Illustrations, drawings, technical diagrams and diagrams can help people quickly understand difficult concepts. This kind of visual information is very popular in our daily life. However, there are many challenges in processing such visual data. As shown Fig 1, these images are similar to hand-drawn sketches, lacking background or other contextual information in the images. These images often provide several different viewpoints, which increases the difficulty of image retrieval. This challenge requires participants to extract robust image representations from the DeepPatent dataset for abstract diagram retrieval. Given a query image, participants were required to retrieve images belonging to the same patent or representing similar objects. We found that this patent retrieval task is very similar to the person re-identification task. Therefore, we design a framework for patent retrieval based on the person Re-ID methods. The rest of our report is organized as follows: In Section 2, we describe our approach, including overview, data augmentation, backbone, loss, post-processing, training details and dataset usage; In Section 3, we describe our code usage.
+Illustrations, drawings, technical diagrams and diagrams can help people quickly understand difficult concepts. This kind of visual information is very popular in our daily life. However, there are many challenges in processing such visual data. As shown in Fig 1., these images are similar as hand-drawn sketches, without background or other contextual information. These images are often presented in several different viewpoints, which increases the difficulty of image retrieval. This challenge requires participants to extract robust image representations from DeepPatent[1] dataset for abstract diagram retrieval. Given a query image, participants were required to retrieve images that belong to the same patent or representing similar objects. 
+
+We found the patent retrieval task very similar to person re-identification task. Therefore, we design a framework for patent retrieval based on person Re-ID methods. The rest of our report is organized as follows: In Section 2, we describe our approach, including the overview, data augmentation, backbone network, loss function, post-processing, training details and dataset usage; In Section 3, we describe our code guidance.
 
 <img src=".assets/image-20221009145459227.png" alt="image-20221009145459227" style="zoom:50%;" />
 
-# Method
+<center style="font-size:16px;color:#000">Fig 1.</center> 
 
-## Overview
+## Method
 
-The framework of our method is shown in Figure1, which consists of Data Augmentation, backbone , loss , testing details, training details and datasets modules.
+### Overview
+
+The framework of our method is shown in Fig 2.
 
 ![image-20221009162405174](.assets/image-20221009162405174.png)
 
-
+<center style="font-size:16px;color:#000">Fig 2.</center> 
 
 ### Data Augmentation
 
-we use autoaugment method[1]. It can search appropriate composed augmentation including flip, rotate, bright/color change · · · etc. Random Erasing is also utilize to avoid model overfitting.
+We applied autoaugment method[1], which can search appropriate composed augmentation including flip, rotate, bright/color change,etc. Random Erasing is also utilize to avoid model overfitting.
 
-### Backbone
+### Backbone Network
 
-The backbone network is a very important module for extracting image representations in image retrieval task. We adopt ResNet101[1] as our backbone. IBN[1] and Non-local[1] modules are added to ResNet101 to get more robust features. IBN is.  Both modules are used to help model to learn a better universal image representations. The input image size is set to 256 in the first stage and 384 in the second stage.  After the backbone network, a BN layer and Generalized Mean Pooling (GEM) are utilized to extract the retrieval features and a classifier layer is used to output the probability of different IDs.
+We adopt ResNet101[2] as our backbone. IBN-Net[3] and Non-local[4] modules are added to ResNet101 to get more robust features.  Both modules are used to help model to learn a better universal image representations. The input image size is set to 256 in the first stage and 384 in the second stage.  A BN layer and Generalized Mean Pooling (GEM) are applied at the end of backbone network to extract retrieval features. Finally, a classifier layer is used to output the probability of different IDs.
 
-### Losses
+### Loss Functions
 
-In the training,  circle loss[] and soft-margin triplet loss[] are utilized for metric learning.
-
-
-
-
+In the training phase,  circle loss[5] and soft-margin triplet loss[6] are utilized for metric learning task.
 
 ### Testing
 
-In the test phase, the test image is input into the model to get feature representation. Then the extracted feature is compared with the features in the feature library for the distance metric such as Eucildean and cosine measure. Thereafter, the results are post-processed by Query Expansion which is a re-rank method. The flow of Query Expansion is as follows: Given a query image, and use it to find m similar gallery images. The query feature is defined as fq and m similar gallery features are defined as fg. Then the new query feature is constructed by averaging the verified gallery features and the query feature
-
-
-
-
+In the testing phase, each test image is inputted into the model to get feature representation. Then the extracted feature is compared with the features in the feature library for the distance metric such as Euclidean and cosine measure. Thereafter, the results are post-processed by Query Expansion which is a re-rank method. The flow of Query Expansion is as follows: Given a query image, and use it to find m similar gallery images. The query feature is defined as fq and m similar gallery features are defined as fg. Then the new query feature is constructed by averaging the verified gallery features and the query feature
 
 ### Training
 
@@ -52,13 +48,25 @@ In the test phase, the test image is input into the model to get feature represe
 
 ### Dataset
 
-We only utilize the DeepPatent dataset for training and validation. The training set contains...
+We only used the DeepPatent dataset for training and validation. The training set contains...
 
 ### Reference
 
+[1] Kucer M, Oyen D, Castorena J, et al. DeepPatent: Large scale patent drawing recognition and retrieval[C]//Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision. 2022: 2309-2318.
 
+[2] Cubuk E D, Zoph B, Mane D, et al. Autoaugment: Learning augmentation policies from data[J]. arXiv preprint arXiv:1805.09501, 2018.
 
-## Code for ECCV DIRA Data Challenge
+[3] He K, Zhang X, Ren S, et al. Deep residual learning for image recognition[C]//Proceedings of the IEEE conference on computer vision and pattern recognition. 2016: 770-778.
+
+[4] Pan X, Luo P, Shi J, et al. Two at once: Enhancing learning and generalization capacities via ibn-net[C]//Proceedings of the European Conference on Computer Vision (ECCV). 2018: 464-479.
+
+[5] Wang X, Girshick R, Gupta A, et al. Non-local neural networks[C]//Proceedings of the IEEE conference on computer vision and pattern recognition. 2018: 7794-7803.
+
+[6] Sun Y, Cheng C, Zhang Y, et al. Circle loss: A unified perspective of pair similarity optimization[C]//Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2020: 6398-6407.
+
+[7] Schroff F, Kalenichenko D, Philbin J. Facenet: A unified embedding for face recognition and clustering[C]//Proceedings of the IEEE conference on computer vision and pattern recognition. 2015: 815-823.
+
+## Code Guidance for ECCV DIRA Data Challenge
 
 The following describe our code for DIRA Data Challenge
 
@@ -144,4 +152,6 @@ CUDA_VISIBLE_DEVICES=0 python3 tools/train_net.py --config-file ./configs/patent
 ```
 
 We train our model through two stage. Stage1 train the original dataset with 256$\times$ 256 resolution . Stage2 finetune the trainset with 384 resolution which is inspired by **[kaggle-landmark-2021-1st-place](https://github.com/ChristofHenkel/kaggle-landmark-2021-1st-place)**.  
+
+## Reference
 
