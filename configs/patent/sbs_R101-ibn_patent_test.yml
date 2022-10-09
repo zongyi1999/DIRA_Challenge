@@ -21,7 +21,7 @@ SOLVER:
 
 
 DATASETS:
-  NAMES: ("Patent",)
+  NAMES: ("PatentTest",)
   TESTS: ("PatentTest",)
 
 DATALOADER:

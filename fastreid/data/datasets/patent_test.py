@@ -34,11 +34,12 @@ class PatentTest(ImageDataset):
         # self.root = osp.abspath(osp.expanduser(root))
         self.root = root
         self.test_dir  = osp.join(self.root, self.dataset_test_dir)
-        self.image_dir = osp.join(self.root,"train_data","patent_data")
-        self.train_path = osp.join(self.root, "train_data","train_patent_trn.txt")
-        self.test_db = osp.join(self.test_dir,"lists/test_database.txt") # "/media/backup/competition/eccv_retrieve/fast-reid/datasets/codalab_test_set/lists/test_database.txt"
-        self.test_query = osp.join(self.test_dir,"lists/test_queries.txt") # "/media/backup/competition/eccv_retrieve/fast-reid/datasets/codalab_test_set/lists/test_queries.txt"
-        train = lambda: self.process_dir(self.image_dir, self.train_path, is_train=True)
+        # self.image_dir = osp.join(self.root,"train_data","patent_data")
+        # self.train_path = osp.join(self.root, "train_data","train_patent_trn.txt")
+        self.test_db = osp.join(self.test_dir,"lists/test_database.txt") 
+        self.test_query = osp.join(self.test_dir,"lists/test_queries.txt")
+        # train = lambda: self.process_dir(self.image_dir, self.train_path, is_train=True)
+        train = []
         query = lambda: self.process_test_dir(self.test_dir,self.test_query,  is_query=True)
         gallery = lambda: self.process_test_dir(self.test_dir,self.test_db, is_query=False) 
         super(PatentTest, self).__init__(train, query, gallery, **kwargs)

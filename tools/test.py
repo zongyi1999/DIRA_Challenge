@@ -85,8 +85,8 @@ def main(args):
     data_loader, num_query = build_reid_test_loader(cfg, dataset_name=cfg.DATASETS.TESTS[0])
     results_i = inference_for_submit(model, data_loader,  flip_test=cfg.TEST.FLIP.ENABLED)
     print(results_i.shape)
-    torch.save(results_i, "./features_test_final.pt")
-    results_i = torch.load("./features_test_final.pt") #.cuda()
+    # torch.save(results_i, "./features_test_final.pt")
+    # results_i = torch.load("./features_test_final.pt") #.cuda()
     # print(results_i.shape)
     query_features = results_i[:num_query]
     gallery_features = results_i[num_query:]
@@ -97,7 +97,6 @@ def main(args):
         qe_k = cfg.TEST.AQE.QE_K
         alpha = cfg.TEST.AQE.ALPHA
         query_features, gallery_features = aqe(query_features, gallery_features, qe_time, qe_k, alpha)
-
     scores = build_dist(query_features, gallery_features, cfg.TEST.METRIC)
     print(scores.shape)
     scores_idxs = []
@@ -106,7 +105,7 @@ def main(args):
     scores_idxs = np.vstack( scores_idxs)
     scores_submit = scores_idxs[:, :10]
     print(scores_submit)
-    np.save( "./result_reid_test_final.npy", scores_submit)
+    np.save( "./result.npy", scores_submit)
 
 
     # scores2 = np.load("./result_reid_aqe.npy")
