@@ -146,5 +146,5 @@ CUDA_VISIBLE_DEVICES=0 python3 tools/train_net.py --config-file ./configs/patent
 CUDA_VISIBLE_DEVICES=0 python3 tools/train_net.py --config-file ./configs/patent/sbs_R101-ibn_patent_384.yml MODEL.DEVICE "cuda:0" 
 ```
 
-We train our model through two stages. Stage1 train the original dataset at 256$\times$ 256 resolution . Stage2 finetune the trainset at 384 $\times$ 384 resolution which is inspired by **[kaggle-landmark-2021-1st-place](https://github.com/ChristofHenkel/kaggle-landmark-2021-1st-place)**.  
+We train our model through two stages. Stage1 train the original dataset at 256 $\times$ 256 resolution . Stage2 finetune the trainset at 384 $\times$ 384 resolution which is inspired by **[kaggle-landmark-2021-1st-place](https://github.com/ChristofHenkel/kaggle-landmark-2021-1st-place)**.  
 
